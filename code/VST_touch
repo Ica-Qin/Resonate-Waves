@@ -1,0 +1,108 @@
+#include "MIDIUSB.h"
+#include "pitchToNote.h"
+#include <Wire.h>
+#include "Adafruit_MPR121.h"
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+ #include <avr/power.h> // required for 16 MHz Adafruit Trinket
+#endif
+
+#define NUM_BUTTONS 7
+#define INTENSITY_POT A0 // correct analog pin definition
+#define LED_PIN 8       // pin connected to the LED
+#define LED_COUNT 60    // number of LEDs
+
+Adafruit_MPR121 cap = Adafruit_MPR121();
+Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+
+const byte notePitches[NUM_BUTTONS] = {pitchA3, pitchD3b, pitchA3, pitchD3b, pitchA3, pitchD3b, pitchA3};
+uint8_t pressedButtons = 0x00;
+uint8_t previousButtons = 0x00;
+uint8_t intensity;
+
+void setup() {
+  // ini MPR121
+  if (!cap.begin(0x5A)) {
+    while (1);
+  }
+  // ini NeoPixel strip
+  strip.begin();
+  strip.show(); // set all pixels to "off" ini
+}
+
+void loop() {
+  readButtons();
+  readIntensity();
+  playNotes();
+  effectTwoColorGradient(); // call the gradient effect function
+}
+
+void readButtons() {
+  uint16_t currTouched = cap.touched();
+
+  for (int i = 0; i < NUM_BUTTONS; i++) {
+    if (currTouched & (1 << i)) {
+      bitWrite(pressedButtons, i, 1);
+    } else {
+      bitWrite(pressedButtons, i, 0);
+    }
+  }
+}
+
+void readIntensity() {
+  int val = analogRead(INTENSITY_POT);
+  intensity = (uint8_t)(map(val, 0, 1023, 0, 127));
+}
+
+void playNotes() {
+  for (int i = 0; i < NUM_BUTTONS; i++) {
+    if (bitRead(pressedButtons, i) != bitRead(previousButtons, i)) {
+      if (bitRead(pressedButtons, i)) {
+        bitWrite(previousButtons, i, 1);
+        noteOn(0, notePitches[i], intensity);
+        MidiUSB.flush();
+        // handle LED color in effectTwoColorGradient
+      } else {
+        bitWrite(previousButtons, i, 0);
+        noteOff(0, notePitches[i], 0);
+        MidiUSB.flush();
+        // handle LED color in effectTwoColorGradient
+      }
+    }
+  }
+}
+
+void noteOn(byte channel, byte pitch, byte velocity) {
+  midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
+  MidiUSB.sendMIDI(noteOn);
+}
+
+void noteOff(byte channel, byte pitch, byte velocity) {
+  midiEventPacket_t noteOff = {0x08, 0x80 | channel, pitch, velocity};
+  MidiUSB.sendMIDI(noteOff);
+}
+
+// blue-yellow and green-yellow gradient effect
+void effectTwoColorGradient() {
+  static uint16_t j = 0; // offset to control color gradient
+  uint32_t color1 = strip.Color(0, 0, 255);  // blue
+  uint32_t color2 = strip.Color(255, 255, 0);  // yellow
+
+  for (int i = 0; i < strip.numPixels(); i++) {
+    // if the button is pressed, set it to green / or gradient effect
+    if (i < NUM_BUTTONS && bitRead(pressedButtons, i)) {
+      strip.setPixelColor(i, strip.Color(0, 255, 0)); // button is pressed - green
+    } else {
+      float ratio = (float)((i * 32768 / strip.numPixels() + j) & 0xFFFF) / 32768.0;
+      ratio = min(1.0, max(0.0, ratio));
+      uint8_t r = (1.0 - ratio) * ((color1 >> 16) & 0xFF) + ratio * ((color2 >> 16) & 0xFF);
+      uint8_t g = (1.0 - ratio) * ((color1 >> 8) & 0xFF) + ratio * ((color2 >> 8) & 0xFF);
+      uint8_t b = (1.0 - ratio) * (color1 & 0xFF) + ratio * (color2 & 0xFF);
+      strip.setPixelColor(i, strip.Color(r, g, b));
+    }
+  }
+  strip.setBrightness(20); // set brightness to 20
+  strip.show(); // show updated colors
+  j += 512; // increase gradient offset to speed up gradient change
+  delay(20); // delay to control animation speed
+}
