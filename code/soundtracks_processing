@@ -1,0 +1,108 @@
+import ddf.minim.*;
+import processing.serial.*;
+
+Minim minim;
+AudioPlayer[] tracks;
+Serial arduino;
+
+boolean[] switchStates;       // status of switchs
+boolean[] lastSwitchStates;   // last status
+float[] volumes;              // volume control
+boolean anySwitchOn = false;  // check if any switch is opened
+
+void setup() {
+  size(400, 600);
+  minim = new Minim(this);
+
+  // preload files of tracks
+  String[] files = {
+    "1.mp3", "2.mp3", "3.mp3", "4.mp3", "5.mp3",
+    "6.mp3", "7.mp3", "8.mp3", "9.mp3", "10.mp3"
+  };
+  tracks = new AudioPlayer[files.length];
+  switchStates = new boolean[files.length];
+  lastSwitchStates = new boolean[files.length];
+  volumes = new float[files.length];
+
+  for (int i = 0; i < files.length; i++) {
+    tracks[i] = minim.loadFile(files[i], 2048); // increase buffer
+    tracks[i].rewind();
+    tracks[i].setGain(-80); // ini MUTE
+    tracks[i].play();       // 
+    println("加载音轨：" + files[i]);
+  }
+
+  arduino = new Serial(this, "COM4", 9600);
+  arduino.bufferUntil('\n'); // read by row
+}
+
+void draw() {
+  background(200);
+  textSize(16);
+  text("Processing & Arduino 音轨控制", 10, 20);
+
+  // show the status of tracks
+  for (int i = 0; i < tracks.length; i++) {
+    text("音轨 " + (i + 1) + ": " +
+      (switchStates[i] ? "开启" : "关闭") +
+      ", 音量: " + nf(volumes[i], 1, 2),
+      10, 40 + i * 20);
+  }
+}
+
+void serialEvent(Serial port) {
+  String data = arduino.readStringUntil('\n').trim();
+
+  println("接收到的数据：" + data);
+
+  if (!data.startsWith("#")) {
+    println("数据格式错误：未找到标记符");
+    return;
+  }
+
+  String[] tokens = data.substring(1).split(",");
+  if (tokens.length != 20) { // 10 switchs & 10 potentiometer
+    println("数据长度错误：" + tokens.length);
+    return;
+  }
+
+  try {
+    boolean anySwitchPreviouslyOn = anySwitchOn;
+    anySwitchOn = false;
+
+    // update status of switch and volume
+    for (int i = 0; i < tracks.length; i++) {
+      switchStates[i] = tokens[i * 2].equals("1");
+      if (switchStates[i]) anySwitchOn = true;
+
+      int knobValue = Integer.parseInt(tokens[i * 2 + 1]);
+      volumes[i] = map(knobValue, 0, 1023, -80, 0);
+    }
+
+    // logic of tracks
+    for (int i = 0; i < tracks.length; i++) {
+      if (switchStates[i]) {
+        if (Math.abs(volumes[i] - tracks[i].getGain()) > 0.1) {
+          tracks[i].setGain(volumes[i]);
+        }
+      } else {
+        tracks[i].setGain(-80);
+      }
+    }
+
+    // off-on, play tracks together
+    if (anySwitchOn && !anySwitchPreviouslyOn) {
+      for (int i = 0; i < tracks.length; i++) {
+        if (!tracks[i].isPlaying()) {
+          tracks[i].rewind();
+          tracks[i].play();
+        }
+      }
+    }
+
+    // save last status of switchs
+    System.arraycopy(switchStates, 0, lastSwitchStates, 0, tracks.length);
+  } catch (Exception e) {
+    println("数据解析错误：" + e.getMessage());
+  }
+}
