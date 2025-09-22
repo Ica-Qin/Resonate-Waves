@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/c223b157-afe8-4107-9401-a3510e9ebd4f
 ## Roles and Responsibilities
 
 ### General
-We cooperated closely and effectively together. There were some main parts that each of us took charge of while most of the works were done together with a high-quality exchange of ideas. All of us took part throughout the stages from planning, preparing, coding, prototyping, making, installation, video and photo shooting to final documentation.
+We cooperated closely and effectively together. There were some main parts that each of us took charge of, while most of the works were done together with a high-quality exchange of ideas. All of us took part throughout the stages from planning, preparing, coding, prototyping, making, installation, video and photo shooting, to final documentation.
 
 ### Coding
 - Switches and potentiometers controlling soundtracks and volumes: Xueyi Wang
@@ -38,7 +38,7 @@ Debugging and the combination of different parts of the code were done together.
 - Design and laser cutting of mountains, clouds and trees: Haoqing Yan
 - 3D modelling and printing of the terraces, box and gear construction, resin stimulating water: Peiyang Qin
 
-Dying of the mountains, installation and other related works on making were done together.
+Dying of the Mountains, installation and other related works on making were done together.
 
 ### Documentation
 - Design of the graph of sources of materials and video editing: Xueyi Wang
@@ -82,7 +82,7 @@ Arduino Mega | Arduino Leonardo | Led diode | WS2812E Full-color pixel strip | W
 <img width="2480" height="3523" alt="materials" src="https://github.com/user-attachments/assets/2ccce569-3f34-4994-835e-e904ca571c6c" />
 
 
-When it comes to the fabrication industry, people always think about the aspect of pollution and waste. However, why don't we think of it as a modern form of "agriculture", simply a kind of collective production? We always blame the fabrication industry despite our intense demand for industrial goods, not only for our daily lives but also for the production of daily necessities. Just as peasants would raise fish in terraced fields to make multiple uses of the ground, we make multiple by-products in the fabrication industries as shown in the upper flow chat. We admit the truth that the fabrication industry does produce pollution and waste, but without a well-organized production system, there would be much more pollution to be produced to fulfil the growing human need brought by the development of technology.
+When it comes to the fabrication industry, people always think about the aspect of pollution and waste. However, why don't we think of it as a modern form of "agriculture", simply a kind of collective production? We always blame the fabrication industry despite our intense demand for industrial goods, not only for our daily lives but also for the production of daily necessities. Just as peasants would raise fish in terraced fields to make multiple uses of the ground, we make multiple by-products in the fabrication industries, as shown in the upper flow chart. We admit the truth that the fabrication industry does produce pollution and waste, but without a well-organised production system, there would be much more pollution produced to fulfil the growing human need brought by the development of technology.
 
 
 ## Working Processes
@@ -107,11 +107,11 @@ VST Instruments
 
 As soon as we decided on the form of soundtracks and VST instrument touchboards, Xueyi started the progress of the music composition and arrangement, and Peiyang started to find the Chinese instrument sound bank. 
 
-After weighing the limitations of the Arduino board and the 3D-printed case in handling multiple tracks against the desired musical outcome, Xueyi created a looping composition with 10 individual tracks. The overall music aligns with the project's theme, featuring a strong Chinese aesthetic. Xueyi emphasized this by using traditional instruments like the guzheng, bamboo flute, and Chinese drums. To enrich the texture of the melody, Xueyi also included plucked strings from Western orchestral instruments as a subtle background layer. 
+After weighing the limitations of the Arduino board and the 3D-printed case in handling multiple tracks against the desired musical outcome, Xueyi created a looping composition with 10 individual tracks. The overall music aligns with the project's theme, featuring a strong Chinese aesthetic. Xueyi emphasised this by using traditional instruments like the guzheng, bamboo flute, and Chinese drums. To enrich the texture of the melody, Xueyi also included plucked strings from Western orchestral instruments as a subtle background layer. 
 
 Additionally, to give the music a bit of a "DJ vibe" (matching the first impression we wanted our project to convey), Xueyi boldly added energetic tracks featuring drum kits and synthetic percussion, which turned out quite well. 
 
-As for the vocal elements, it's worth mentioning that both the choir and vocal samples are drawn from a traditional folk song from southern China called "Tian Hei Hei." This song reflects the blend of traditional Chinese agrarian culture with the natural environment, which perfectly fits the core concept we aimed to convey through our project.
+As for the vocal elements, it's worth mentioning that both the choir and vocal samples are drawn from a traditional folk song from southern China called "Tian Hei Hei." This song reflects the blend of conventional Chinese agrarian culture with the natural environment, which perfectly fits the core concept we aimed to convey through our project.
 
 Music Arrangement Process(Software: Garageband)
 
@@ -141,11 +141,11 @@ https://github.com/user-attachments/assets/04684c1e-a67e-4aea-963f-7642b0c7d7f7
 
 
 
-For controlling and playing the 10 soundtracks, we thought about using a DF player at the beginning. However, we then found that one DF player could only play one music file at a time, so we could not have the 10 soundtracks playing together but being controlled separately. When considering using 10 DF players to control the soundtracks, we were suggested using processing to control and play the sounds on the computer to cut down the cost.
+For controlling and playing the 10 soundtracks, we thought about using a DF player at the beginning. However, we then found that one DF player could only play one music file at a time, so we could not have the 10 soundtracks playing together but being controlled separately. When considering using 10 DF players to control the soundtracks, we were advised to use processing to control and play the sounds on the computer to cut down the cost.
 
-We also met a laughable problem when we tried to set up the LED pixel strips. For more than 2 hours, we tried so hard to light up the pixels in the most simple way to check why it did not work, after which we found that it was simply because the first pixel on the strip we bought was broken.
+We also met a laughable problem when we tried to set up the LED pixel strips. For more than 2 hours, we tried so hard to light up the pixels in the simplest way to check why it did not work, after which we found that it was simply because the first pixel on the strip we bought was broken.
 
-The material we used for the touchboards was a lucky coincidence. We noticed one role of tinfoil when we were finding switches in the CCI building and we were about to leave when the idea suddenly came to all of us at the same time that it could be really good material for us to link to a touch sensor.
+The material we used for the touchboards was a lucky coincidence. We noticed one role of tinfoil when we were finding switches in the CCI building, and we were about to leave when the idea suddenly came to all of us at the same time that it could be excellent material for us to link to a touch sensor.
 
 
 
@@ -173,7 +173,7 @@ When the laser cutting of the mountains, clouds and trees was done, Peiyang bega
 
 
 
-The water layer on top of the terrace was made in the process of 3D printing, silicone moulds, and epoxy resin making. We first tried a PVC board, heating it to stimulate water and using epoxy resin to cover the shape, but we failed to take the resin off the PVC board so we decided quickly to do 3D printing and silicone moulds.
+The water layer on top of the terrace was made in the process of 3D printing, silicone moulds, and epoxy resin making. We first tried a PVC board, heating it to stimulate water and using epoxy resin to cover the shape, but we failed to take the resin off the PVC board, so we decided quickly to do 3D printing and silicone moulds.
 
 
 
@@ -188,12 +188,12 @@ The terraces were coloured with acrylic paint and epoxy resin. They were then gl
 
 ### **Soldering & Installation**
 
-In the beginning, we decided to link the LED diodes with the switches so that we do not need to control the diodes separately with additional codes. 
+In the beginning, we decided to link the LED diodes with the switches so that we do not need to control the diodes separately with additional code. 
 
 ![circut-sketch](https://github.com/user-attachments/assets/50915ed2-2678-438c-b503-2e54d54c709d)
 
 
-But when we finished the soldering process we found that this slight difference with our prototype caused a big problem to our codes. So we removed the soldering and designed the circuits again.
+But when we finished the soldering process, we found that this slight difference with our prototype caused a big problem with our code. So we removed the soldering and designed the circuits again.
 
 
 ![final-circut](https://github.com/user-attachments/assets/c9a309e9-bfeb-4cb8-b1b0-1dd048f935a2)
@@ -202,7 +202,7 @@ But when we finished the soldering process we found that this slight difference 
 
 ## Further Development
 
-Since we need to use Processing to control the soundtracks and VST instruments on the computer, this box should be linked with two computers to run. For further development maybe we could try other operating systems, maybe  Raspberry Pi, to make it run independently.
+Since we need to use Processing to control the soundtracks and VST instruments on the computer, this box should be linked with two computers to run. For further development, maybe we could try other operating systems, maybe  Raspberry Pi, to make it run independently.
 
 Group Photo(Haoqing Yan, Peiyang Qin, Xueyi Wang
 ![Group photo](final-project-files/pictures/group-photo.jpg)
