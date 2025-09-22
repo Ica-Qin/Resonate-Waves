@@ -1,0 +1,103 @@
+#include <Adafruit_NeoPixel.h>
+
+//origin
+const int switchPins[10] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; // 10 buttons
+const int knobPins[10] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9}; // 10 potentiometers
+const int ledPins[10] = {40, 41, 42, 44, 45, 46, 48, 51, 52, 53}; // 10 leds
+
+// NeoPixel
+const int neoPixelPins[4] = {A15, A13, A12, A11}; // NeoPixel's digital pin
+#define NUMPIXELS 30 // the number of leds
+Adafruit_NeoPixel strips[4] = {
+  Adafruit_NeoPixel(NUMPIXELS, A14, NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(NUMPIXELS, A13, NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(NUMPIXELS, A12, NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(NUMPIXELS, A11, NEO_GRB + NEO_KHZ800)
+};
+
+//colour, speed and light
+#define GRADIENT_STEPS 200       // gradient
+#define GRADIENT_DELAY 10        // delay
+#define BRIGHTNESS 10            // light(0-255)
+
+void setup() {
+  Serial.begin(9600);
+  
+  // pull up input
+  for (int i = 0; i < 10; i++) {
+    pinMode(switchPins[i], INPUT_PULLUP);
+  }
+
+  // led pin output
+  for (int i = 0; i < 10; i++) {
+    pinMode(ledPins[i], OUTPUT);
+    digitalWrite(ledPins[i], LOW); // ini:turn pff
+  }
+
+  // ini neopixel
+  for (int i = 0; i < 4; i++) {
+    strips[i].begin();
+    strips[i].setBrightness(BRIGHTNESS); // light
+    strips[i].show(); 
+  }
+}
+
+void loop() {
+  Serial.print('#'); //data mark
+  
+  for (int i = 0; i < 10; i++) {
+    // read the buttons
+    byte switchState = digitalRead(switchPins[i]) == LOW ? 1 : 0;
+
+    // control the leds
+    if (switchState == 1) {
+      digitalWrite(ledPins[i], HIGH); // turn on - LED
+    } else {
+      digitalWrite(ledPins[i], LOW);  // turn off - LED
+    }
+
+    // send the status of buttons
+    Serial.print(switchState);
+    Serial.print(',');
+
+    // read the potentiometers
+    int knobValue = analogRead(knobPins[i]);
+    Serial.print(knobValue);
+    if (i < 9) Serial.print(',');
+  }
+
+  Serial.println();
+
+  // button 5、6、7、8 - neopixel
+  const int controlSwitches[4] = {5, 6, 7, 8};
+
+  for (int i = 0; i < 4; i++) {
+    if (digitalRead(switchPins[controlSwitches[i] - 2]) == LOW) { // switchPins[3] - 5
+      applySolidGradient(strips[i]);            // one-color gradient
+    } else {
+      strips[i].clear(); 
+      strips[i].show();
+    }
+  }
+
+  delay(50); 
+}
+
+// yellow-green (255, 255, 0) to blue-green (0, 255, 255)
+void applySolidGradient(Adafruit_NeoPixel &strip) {
+  for (int step = 0; step <= GRADIENT_STEPS; step++) {
+    float ratio = (float)step / GRADIENT_STEPS; // gradient scale 0-1
+
+    uint8_t red = (uint8_t)(255 * (1 - ratio)); // red 255-0
+    uint8_t green = 240;                        // green 255
+    uint8_t blue = (uint8_t)(255 * ratio);      // blue 0-255
+
+    // color of leds on neopixel
+    uint32_t color = strip.Color(red, green, blue);
+    for (int j = 0; j < NUMPIXELS; j++) {
+      strip.setPixelColor(j, color);
+    }
+    strip.show(); // update neopixel
+    delay(GRADIENT_DELAY); // control speed
+  }
+}
